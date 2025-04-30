@@ -78,7 +78,11 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git terraform)
+plugins=(
+  git 
+  docker
+  terraform
+  )
 
 source $ZSH/oh-my-zsh.sh
 
@@ -112,23 +116,35 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Boxed command output hooks for visual encapsulation
-
+# Define colors and boxed hooks
 BOX_COLOR_TOP="%F{blue}"
 BOX_COLOR_BOTTOM_SUCCESS="%F{green}"
 BOX_COLOR_BOTTOM_ERROR="%F{red}"
 BOX_COLOR_RESET="%f"
 
-# preexec() {
-#   print -P "${BOX_COLOR_TOP}┌──\\[${1}\\]${BOX_COLOR_RESET}"
-# }
-# precmd() {
-#   EXIT_CODE=$?
-#   if [[ $EXIT_CODE -eq 0 ]]; then
-#     print -P "${BOX_COLOR_BOTTOM_SUCCESS}└──[Exit $EXIT_CODE]${BOX_COLOR_RESET}"
-#   else
-#     print -P "${BOX_COLOR_BOTTOM_ERROR}└──[Exit $EXIT_CODE]${BOX_COLOR_RESET}"
-#   fi
-# }
+#_roo_box_preexec() {
+#  emulate -L zsh
+#  print -P "${BOX_COLOR_TOP}┌──[Running: ${1}]${BOX_COLOR_RESET}"
+#}
+#_roo_box_precmd() {
+#  emulate -L zsh
+#  local ec=$?
+#  if [[ $ec -eq 0 ]]; then
+#    print -P "${BOX_COLOR_BOTTOM_SUCCESS}└──[Exit $ec]${BOX_COLOR_RESET}"
+#  else
+#    print -P "${BOX_COLOR_BOTTOM_ERROR}└──[Exit $ec]${BOX_COLOR_RESET}"
+#  fi
+#}
+
+# Delay hook activation until first prompt
+#autoload -Uz add-zsh-hook
+#_zsh_lazy_hook_enable() {
+#  add-zsh-hook precmd _roo_box_precmd
+#  add-zsh-hook preexec _roo_box_preexec
+#  add-zsh-hook -d precmd _zsh_lazy_hook_enable
+#}
+#add-zsh-hook precmd _zsh_lazy_hook_enable
+
 
 # Default to human-readable, detailed lists on ls
 alias ls='ls -lh'
@@ -138,3 +154,7 @@ alias ls='ls -lh'
 
 # Created by `pipx` on 2025-04-30 12:16:39
 export PATH="$PATH:/Users/sergey/.local/bin"
+
+#Per Roo Code
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+#typeset -g POWERLEVEL9K_TERM_SHELL_INTEGRATION=true
