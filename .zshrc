@@ -1,3 +1,21 @@
+# ==============================
+# Modular Zsh Configuration
+#
+# This .zshrc uses workspace-local modular config via .zshrc.d/
+#
+# Philosophy:
+# - Only active, actually-used configurations are extracted below into .zshrc.d/ fragments.
+# - Oh My Zsh, theme, and related setup stay here for clarity and portability.
+# - All modular config is in-version-control under this workspace.
+#
+# Practices:
+# - To add config, create a descriptive, numerically-prefixed <nn>-name.zsh file in .zshrc.d/
+#   (e.g., 10-boxed-hooks.zsh, 20-alias-ls.zsh, 30-pipx-path.zsh, 40-vscode-integration.zsh).
+# - Remove config by deleting its file (with git for tracking).
+# - Avoid putting unnecessary or unused boilerplate in modules; keep fragments readable.
+# - The symlink at ~/.zshrc.d ensures portability and relocation.
+# ==============================
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -6,155 +24,17 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 setopt NO_NOMATCH
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-
-# Path to your Oh My Zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time Oh My Zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME="powerlevel10k/powerlevel10k"
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git 
-  docker
-  terraform
-  )
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='nvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch $(uname -m)"
-
-# Set personal aliases, overriding those provided by Oh My Zsh libs,
-# plugins, and themes. Aliases can be placed here, though Oh My Zsh
-# users are encouraged to define aliases within a top-level file in
-# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
-# - $ZSH_CUSTOM/aliases.zsh
-# - $ZSH_CUSTOM/macos.zsh
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# Boxed command output hooks for visual encapsulation
-# Define colors and boxed hooks
-BOX_COLOR_TOP="%F{blue}"
-BOX_COLOR_BOTTOM_SUCCESS="%F{green}"
-BOX_COLOR_BOTTOM_ERROR="%F{red}"
-BOX_COLOR_RESET="%f"
-
-_roo_box_preexec() {
-  emulate -L zsh
-  print -P "${BOX_COLOR_TOP}┌──[Running: ${1}]${BOX_COLOR_RESET}"
-}
-_roo_box_precmd() {
-  emulate -L zsh
-  local ec=$?
-  if [[ $ec -eq 0 ]]; then
-    print -P "${BOX_COLOR_BOTTOM_SUCCESS}└──[Exit $ec]${BOX_COLOR_RESET}"
-  else
-    print -P "${BOX_COLOR_BOTTOM_ERROR}└──[Exit $ec]${BOX_COLOR_RESET}"
-  fi
-}
-
-# Delay hook activation until first prompt
-autoload -Uz add-zsh-hook
-_zsh_lazy_hook_enable() {
-  add-zsh-hook precmd _roo_box_precmd
-  add-zsh-hook preexec _roo_box_preexec
-  add-zsh-hook -d precmd _zsh_lazy_hook_enable
-}
-add-zsh-hook precmd _zsh_lazy_hook_enable
-
-
-# Default to human-readable, detailed lists on ls
-alias ls='ls -lh'
+# --- Modular configuration: loading fragments from .zshrc.d/ ---
+# Loads all numerically-named, intentionally modularized workspace-local config,
+# such as 10-boxed-hooks.zsh, 20-alias-ls.zsh, 30-pipx-path.zsh, 40-vscode-integration.zsh.
+# If the .zshrc.d directory doesn't exist, loading is skipped and no error is shown.
+# For details, see comments in each .zshrc.d/*.zsh file.
+if [ -d "${ZDOTDIR:-$HOME}/.zshrc.d" ]; then
+  for f in "${ZDOTDIR:-$HOME}/.zshrc.d/"*.zsh; do
+    [ -r "$f" ] && . "$f"
+  done
+fi
+# --- End modular configuration ---
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Created by `pipx` on 2025-04-30 12:16:39
-export PATH="$PATH:/Users/sergey/.local/bin"
-
-#Per Roo Code
-[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
-#typeset -g POWERLEVEL9K_TERM_SHELL_INTEGRATION=true
+# Powerlevel10k prompt configuration has been modularized to .zshrc.d/00-oh-my-zsh.zsh
