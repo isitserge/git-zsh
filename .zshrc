@@ -122,28 +122,28 @@ BOX_COLOR_BOTTOM_SUCCESS="%F{green}"
 BOX_COLOR_BOTTOM_ERROR="%F{red}"
 BOX_COLOR_RESET="%f"
 
-#_roo_box_preexec() {
-#  emulate -L zsh
-#  print -P "${BOX_COLOR_TOP}┌──[Running: ${1}]${BOX_COLOR_RESET}"
-#}
-#_roo_box_precmd() {
-#  emulate -L zsh
-#  local ec=$?
-#  if [[ $ec -eq 0 ]]; then
-#    print -P "${BOX_COLOR_BOTTOM_SUCCESS}└──[Exit $ec]${BOX_COLOR_RESET}"
-#  else
-#    print -P "${BOX_COLOR_BOTTOM_ERROR}└──[Exit $ec]${BOX_COLOR_RESET}"
-#  fi
-#}
+_roo_box_preexec() {
+  emulate -L zsh
+  print -P "${BOX_COLOR_TOP}┌──[Running: ${1}]${BOX_COLOR_RESET}"
+}
+_roo_box_precmd() {
+  emulate -L zsh
+  local ec=$?
+  if [[ $ec -eq 0 ]]; then
+    print -P "${BOX_COLOR_BOTTOM_SUCCESS}└──[Exit $ec]${BOX_COLOR_RESET}"
+  else
+    print -P "${BOX_COLOR_BOTTOM_ERROR}└──[Exit $ec]${BOX_COLOR_RESET}"
+  fi
+}
 
 # Delay hook activation until first prompt
-#autoload -Uz add-zsh-hook
-#_zsh_lazy_hook_enable() {
-#  add-zsh-hook precmd _roo_box_precmd
-#  add-zsh-hook preexec _roo_box_preexec
-#  add-zsh-hook -d precmd _zsh_lazy_hook_enable
-#}
-#add-zsh-hook precmd _zsh_lazy_hook_enable
+autoload -Uz add-zsh-hook
+_zsh_lazy_hook_enable() {
+  add-zsh-hook precmd _roo_box_precmd
+  add-zsh-hook preexec _roo_box_preexec
+  add-zsh-hook -d precmd _zsh_lazy_hook_enable
+}
+add-zsh-hook precmd _zsh_lazy_hook_enable
 
 
 # Default to human-readable, detailed lists on ls
