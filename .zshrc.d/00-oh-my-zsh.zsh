@@ -84,7 +84,8 @@ source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # Load the Powerlevel10k prompt configuration if present
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# This has been separed into it's own autoloading file 999-p10k.zsh
+#[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Powerlevel9k/Powerlevel10k integration (uncomment to enable extra features)
 # typeset -g POWERLEVEL9K_TERM_SHELL_INTEGRATION=true
