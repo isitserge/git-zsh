@@ -38,7 +38,3 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # Powerlevel10k prompt configuration has been modularized to .zshrc.d/00-oh-my-zsh.zsh
-
-
-# Load Angular CLI autocompletion.
-source <(ng completion script)
