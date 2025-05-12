@@ -1,0 +1,41 @@
+# macOS system files
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# Python artifacts
+__pycache__/
+*.pyc
+
+# Node modules (if ever used)
+node_modules/
+
+# Oh My Zsh custom completions: ignore docker completion script (it's generated)
+oh-my-zsh-custom/docker.zsh
+
+# Track modular configs
+!.zshrc.d/*
+!oh-my-zsh-custom/example.zsh
+!oh-my-zsh-custom/themes/example.zsh-theme
+
+# Logs
+*.log
+
+# Other system/editor swap or backup files
+*~
+*.swp
+*.bak
+
+# Ignore binaries and archives
+*.tar
+*.zip
+*.tgz
+*.gz
+*.7z
+*.exe
+*.dll
+*.so
+*.out
+
+# End of file
