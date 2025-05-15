@@ -11,11 +11,9 @@ BOX_COLOR_RESET="%f"
 
 # Hook functions (preexec/precmd)
 _roo_box_preexec() {
-  emulate -L zsh
   print -P "${BOX_COLOR_TOP}┌──[Running: ${1}]${BOX_COLOR_RESET}"
 }
 _roo_box_precmd() {
-  emulate -L zsh
   local ec=$?
   if [[ $ec -eq 0 ]]; then
     print -P "${BOX_COLOR_BOTTOM_SUCCESS}└──[Exit $ec]${BOX_COLOR_RESET}"
