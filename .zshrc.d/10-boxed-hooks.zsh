@@ -11,14 +11,31 @@ BOX_COLOR_RESET="%f"
 
 # Hook functions (preexec/precmd)
 _roo_box_preexec() {
-  print -P "${BOX_COLOR_TOP}┌──[Running: ${1}]${BOX_COLOR_RESET}"
+  # Diagnostic log
+  print -r -- "$(date +'%F %T') [preexec] CMD: $1" >> /tmp/roo_box_log.txt
+  # Only show boxed output in interactive shells
+  if [[ $- == *i* ]]; then
+    # Skip boxed output for empty or whitespace-only commands
+    if [[ -n "${1//[[:space:]]/}" ]]; then
+      print -P "${BOX_COLOR_TOP}┌──[Running: ${1}]${BOX_COLOR_RESET}"
+      typeset -g _BOX_SHOULD_SHOW_FOOTER=1
+    else
+      typeset -g _BOX_SHOULD_SHOW_FOOTER=
+    fi
+  else
+    typeset -g _BOX_SHOULD_SHOW_FOOTER=
+  fi
 }
 _roo_box_precmd() {
   local ec=$?
-  if [[ $ec -eq 0 ]]; then
-    print -P "${BOX_COLOR_BOTTOM_SUCCESS}└──[Exit $ec]${BOX_COLOR_RESET}"
-  else
-    print -P "${BOX_COLOR_BOTTOM_ERROR}└──[Exit $ec]${BOX_COLOR_RESET}"
+  print -r -- "$(date +'%F %T') [precmd] EXIT: $ec" >> /tmp/roo_box_log.txt
+  if [[ -n "${_BOX_SHOULD_SHOW_FOOTER}" ]]; then
+    if [[ $ec -eq 0 ]]; then
+      print -P "${BOX_COLOR_BOTTOM_SUCCESS}└──[Exit $ec]${BOX_COLOR_RESET}"
+    else
+      print -P "${BOX_COLOR_BOTTOM_ERROR}└──[Exit $ec]${BOX_COLOR_RESET}"
+    fi
+    unset _BOX_SHOULD_SHOW_FOOTER
   fi
 }
 

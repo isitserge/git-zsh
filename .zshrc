@@ -31,7 +31,17 @@ setopt NO_NOMATCH
 # For details, see comments in each .zshrc.d/*.zsh file.
 if [ -d "${ZDOTDIR:-$HOME}/.zshrc.d" ]; then
   for f in "${ZDOTDIR:-$HOME}/.zshrc.d/"*.zsh; do
-    [ -r "$f" ] && . "$f"
+    case "$f" in
+      *10-boxed-hooks.zsh)
+        # Load box hooks only in interactive shells (industry standard, classic approach)
+        if [[ $- == *i* ]]; then
+          [ -r "$f" ] && . "$f"
+        fi
+        ;;
+      *)
+        [ -r "$f" ] && . "$f"
+        ;;
+    esac
   done
 fi
 # --- End modular configuration ---
